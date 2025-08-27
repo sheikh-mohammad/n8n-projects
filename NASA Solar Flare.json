@@ -1,0 +1,179 @@
+{
+  "name": "NASA Solar Flare",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 20,
+              "triggerAtMinute": 45
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "5b3fe949-5312-43f0-ae25-2aac105db719",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "resource": "donkiSolarFlare",
+        "additionalFields": {
+          "startDate": "2025-08-26T20:32:43"
+        }
+      },
+      "type": "n8n-nodes-base.nasa",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "fcf61b92-7425-471e-a812-4833f729a6e5",
+      "name": "Get a DONKI solar flare",
+      "credentials": {
+        "nasaApi": {
+          "id": "IMkKHTs6tzVg8diW",
+          "name": "NASA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d33404cd-0e8e-4593-bda5-4870dc86a27b",
+              "leftValue": "={{ $json.catalog }}",
+              "rightValue": "M",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "53529366-0dbb-4f83-9eb8-1d7b1add5148",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "resource": "request",
+        "operation": "send",
+        "binId": "1756222527360-0754726068116",
+        "binContent": "=There was a solar flare of class {{ $json.classType }}",
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.postBin",
+      "typeVersion": 1,
+      "position": [
+        672,
+        -96
+      ],
+      "id": "6fac597f-7edd-49ff-8539-6f12a28ae9a0",
+      "name": "Send a request"
+    },
+    {
+      "parameters": {
+        "resource": "request",
+        "operation": "send",
+        "binId": "1756222527360-0754726068116",
+        "binContent": "=There was a solar flare of class {{ $json.classType }}",
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.postBin",
+      "typeVersion": 1,
+      "position": [
+        672,
+        96
+      ],
+      "id": "0503e616-d68a-4acc-9e9a-a0f03e90feab",
+      "name": "Send a request1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get a DONKI solar flare",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a DONKI solar flare": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a request1": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Karachi",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "52709cc2-c4dd-44a5-a0f1-bd66a62bb55e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d6fa39d2f6acf4f486e84fe45090d12a5469fa614668ea637a2b087e5e179505"
+  },
+  "id": "QN7xDay2nPR761A0",
+  "tags": []
+}
