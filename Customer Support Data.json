@@ -1,0 +1,131 @@
+{
+  "name": "Customer Support Test",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "ca36b007-f27c-4efc-bf11-07f7130a2e4c",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "getAllPeople",
+        "limit": 10
+      },
+      "type": "n8n-nodes-base.n8nTrainingCustomerDatastore",
+      "typeVersion": 1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "da1bc8c1-2cfa-4cf7-91f4-776b7fb89579",
+      "name": "Customer Datastore (n8n training)"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "84ba7235-07c6-4381-8086-ab0c19282764",
+              "name": "customer_name",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "2a11d5b4-b14e-4432-9dc8-a81f27cfad37",
+              "name": "customer_email",
+              "value": "={{ $json.email }}",
+              "type": "string"
+            },
+            {
+              "id": "bc1000d5-b1a1-4670-8b2d-51332af57f60",
+              "name": "customer_query",
+              "value": "={{ $json.notes }}",
+              "type": "string"
+            },
+            {
+              "id": "640d1d41-9919-4989-90dd-fc3bff183766",
+              "name": "customer_address",
+              "value": "={{ $json.country }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "e1a9abc9-524e-4139-ab7a-25faba247bfd",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "customerId": "={{ $json.customer_name }}",
+        "message": "=Hello  {{ $json.customer_name }}. Your Email Address is {{ $json.customer_email }}. You are from {{ $json.customer_address }}. Your query is {{ $json.customer_query }}. Thanks for contacting us."
+      },
+      "type": "n8n-nodes-base.n8nTrainingCustomerMessenger",
+      "typeVersion": 1,
+      "position": [
+        624,
+        0
+      ],
+      "id": "5e7848dd-625e-4a06-bb35-b7a7548afe11",
+      "name": "Customer Messenger (n8n training)"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Customer Datastore (n8n training)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Customer Datastore (n8n training)": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Customer Messenger (n8n training)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1258581f-396c-436e-bf0a-bf042c9c3167",
+  "meta": {
+    "instanceId": "d6fa39d2f6acf4f486e84fe45090d12a5469fa614668ea637a2b087e5e179505"
+  },
+  "id": "NQHTSvWqyE6zettX",
+  "tags": []
+}
